@@ -142,7 +142,7 @@ button,
 .container {
   width: 100%;
   padding: 40px 10px;
-  max-width: 850px;
+  max-width: 1050px;
   margin: 0 auto;
 
   @media (min-width: 900px) {

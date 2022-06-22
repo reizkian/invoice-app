@@ -25,11 +25,22 @@
         </div>
       </div>
     </div>
+
+    <!-- invoices -->
+    <div v-if="invoiceData.length > 0">
+      <Invoice v-for="(eachInvoice, index) in invoiceData" :key="index" :propInvoice="eachInvoice" />
+    </div>
+    <div v-else class="empty flex flex-column">
+      <img src="@/assets/illustration-empty.svg" alt="" />
+      <h3>There is nothing here</h3>
+      <p>create a new invoice by clicking the New Invoice button and get started</p>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from "vuex";
+import Invoice from "@/components/Invoice.vue";
 
 export default {
   name: "Home",
@@ -45,7 +56,10 @@ export default {
       this.filterMenu = !this.filterMenu;
     },
   },
-  components: {},
+  components: { Invoice },
+  computed: {
+    ...mapState(["invoiceData"]),
+  },
 };
 </script>
 
@@ -83,8 +97,7 @@ export default {
           top: 25px;
           list-style: none;
           background-color: #1e2139;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
           li {
             cursor: pointer;
             font-size: 12px;
@@ -113,6 +126,28 @@ export default {
           }
         }
       }
+    }
+  }
+
+  .empty {
+    margin-top: 160px;
+    align-items: center;
+
+    img: {
+      width: 314px;
+      height: 300px;
+    }
+
+    h3{
+      font-size: 20px;
+      margin-top: 40px;
+    }
+
+    p{
+      text-align: center;
+      font-size: 14px;
+      font-weight: 300;
+      margin-top: 16px;
     }
   }
 }
