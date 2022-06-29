@@ -5,6 +5,7 @@ export default createStore({
   state: {
     invoiceData: [],
     invoicesLoaded: false,
+    currentInvoice: [],
     invoiceModal: false,
     modalActive: false,
   },
@@ -17,10 +18,15 @@ export default createStore({
     },
     SET_INVOICE_DATA(state, payload) {
       state.invoiceData.push(...payload);
-      console.log(state.invoiceData)
     },
     INVOICES_LOADED(state) {
       state.invoicesLoaded = true;
+    },
+    SET_CURRENT_INVOICE(state, payload) {
+      state.currentInvoice = state.invoiceData.filter((invoice) => {
+        return invoice._id === payload;
+      });
+      console.log(state.currentInvoice);
     },
   },
   actions: {
