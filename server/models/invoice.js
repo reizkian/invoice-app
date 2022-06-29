@@ -23,6 +23,7 @@ const invoiceSchema = new Schema(
       {
         itemName: String,
         qty: Number,
+        price: Number,
         total: Number,
       },
     ],

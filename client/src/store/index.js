@@ -6,6 +6,7 @@ export default createStore({
     invoiceData: [],
     invoicesLoaded: false,
     currentInvoice: [],
+    editInvoice: false,
     invoiceModal: false,
     modalActive: false,
   },
@@ -28,6 +29,9 @@ export default createStore({
       });
       console.log(state.currentInvoice);
     },
+    TOGGLE_EDIT_INVOICE(state){
+      state.editInvoice = !state.editInvoice;
+    }
   },
   actions: {
     async READ_INVOICES({ commit }) {

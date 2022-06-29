@@ -1,6 +1,6 @@
 <template>
   <div vi-if="invoice" class="invoice-view container">
-    <router-link class="nav-link flex" to="{name:'Home'}"> <img src="@/assets/icon-arrow-left.svg" alt="" /> Go Back </router-link>
+    <router-link class="nav-link flex" :to="{name:'Home'}"> <img src="@/assets/icon-arrow-left.svg" alt="" /> Go Back </router-link>
 
     <!-- header -->
     <div class="header flex">
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="right flex">
-        <button @click="toggleEditInvoice(invoice._id)" class="dark-purple">Edit</button>
+        <button @click="toggleEditInvoice()" class="dark-purple">Edit</button>
         <button @click="deleteInvoice(invoice._id)" class="red">Delete</button>
         <button @click="updateStatusToPaid(invoice._id)" v-if="invoice.invoicePending" class="green">Mark as Paid</button>
         <button @click="updateStatusToPending(invoice._id)" v-if="invoice.invoiceDraft || invoice.invoicePaid" class="orange">Mark as Pending</button>
@@ -24,8 +24,9 @@
     <div class="invoice-details flex flex-column">
       <!-- invoice details - top -->
       <div class="top flex">
-        <div class="left flex">
+        <div class="left flex flex-column">
           <p><span>#</span>{{ invoice._id }}</p>
+          <p>{{invoice.productDescription}}</p>
         </div>
         <div class="right flex flex-column">
           <p>{{ invoice.billerStreetAddress }}</p>
@@ -36,7 +37,7 @@
       </div>
       <!-- invoice details - middle -->
       <div class="middle flex">
-        <div class="payment flex flex.column">
+        <div class="payment flex flex-column">
           <h4>Invoice Date</h4>
           <p>{{ invoice.invoiceDate }}</p>
           <h4>Payment Date</h4>
@@ -73,7 +74,7 @@
         </div>
         <div class="total flex">
           <p>Amount Due</p>
-          <p>{{ invoice.invoiceTotal }}</p>
+          <p>${{ invoice.invoiceTotal }}</p>
         </div>
       </div>
     </div>
@@ -91,11 +92,15 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["SET_CURRENT_INVOICE"]),
+    ...mapMutations(["SET_CURRENT_INVOICE", "TOGGLE_EDIT_INVOICE", "TOGGLE_INVOICE"]),
     getCurrentInvoice() {
       this.SET_CURRENT_INVOICE(this.$route.params._id);
       this.invoice = this.currentInvoice[0];
     },
+    toggleEditInvoice(){
+      this.TOGGLE_EDIT_INVOICE();
+      this.TOGGLE_INVOICE();
+    }
   },
   computed: {
     ...mapState(["currentInvoice"]),
@@ -115,8 +120,185 @@ export default {
     font-size: 12px;
     img {
       margin-right: 16px;
-      widht: 7px;
+      width: 7px;
       height: 10px;
+    }
+  }
+
+  .header,
+  .invoice-details {
+    background-color: #1e2139;
+    border-radius: 20px;
+  }
+
+  .header {
+    align-items: center;
+    padding: 24px 32px;
+    font-size: 12px;
+
+    .left {
+      align-items: center;
+
+      span {
+        color: #dfe3fa;
+        margin-right: 16px;
+      }
+    }
+
+    .right {
+      flex: 1;
+      justify-content: flex-end;
+
+      button {
+        color: #fff;
+      }
+    }
+  }
+
+  .invoice-details {
+    padding: 48px;
+    margin-top: 24px;
+
+    .top {
+      div {
+        color: #dfe3fa;
+        flex: 1;
+      }
+
+      .left {
+        font-size: 12px;
+        p:first-child {
+          font-size: 24px;
+          text-transform: uppercase;
+          color: #fff;
+          margin-bottom: 8px;
+        }
+        p:nth-child(2) {
+          text-align: justify;
+          font-size: 12px;
+          font-weight: 200;
+          color: #888eb0;
+        }
+        span {
+          color: #888eb0;
+        }
+      }
+
+      .right {
+        font-size: 12px;
+        align-items: flex-end;
+        color: #888eb0;
+      }
+    }
+
+    .middle {
+      margin-top: 50px;
+      color: #dfe3fa;
+      gap: 30px;
+
+      h4 {
+        font-size: 12px;
+        font-weight: 400;
+        margin-bottom: 12px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+
+      .bill,
+      .payment {
+        flex: 1;
+      }
+
+      .payment {
+        h4:nth-child(3) {
+          margin-top: 32px;
+        }
+        p {
+          font-weight: 600;
+        }
+      }
+
+      .bill {
+        p:nth-child(2) {
+          font-size: 16px;
+        }
+        p:nth-child(3) {
+          margin-top: 15px;
+        }
+        p {
+          font-size: 12px;
+        }
+      }
+
+      .send-to {
+        flex: 2;
+      }
+    }
+
+    .bottom {
+      margin-top: 50px;
+
+      .billing-items {
+        padding: 32px;
+        border-radius: 20px 20px 0 0;
+        background-color: #252945;
+
+        .heading {
+          color: #dfe3fa;
+          font-size: 12px;
+          margin-bottom: 32px;
+
+          p:first-child {
+            flex: 3;
+            text-align: left;
+          }
+
+          p {
+            flex: 1;
+            text-align: right;
+          }
+        }
+
+        .item {
+          margin-bottom: 32px;
+          font-size: 13px;
+          color: #fff;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          p:first-child {
+            flex: 3;
+            text-align: left;
+          }
+
+          p {
+            flex: 1;
+            text-align: right;
+          }
+        }
+      }
+
+      .total {
+        color: #fff;
+        padding: 32px;
+        background-color: rgba(12, 14, 22, 0.7);
+        align-items: center;
+        border-radius: 0 0 20px 20px;
+
+        p{
+          flex:1;
+          font-size: 12px;
+        }
+
+        p:nth-child(2){
+          font-size: 28px;
+          text-align: right;
+        }
+      }
     }
   }
 }

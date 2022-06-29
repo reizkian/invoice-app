@@ -1,8 +1,10 @@
 <template>
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
     <form @submit.prevent="submitForm" class="invoice-content">
-      <Loading v-show="loading"/>
-      <h1>New Invoice</h1>
+      <Loading v-show="loading" />
+      <h1 v-if="editInvoice">Edit Invoice</h1>
+      <h1 v-else>New Invoice</h1>
+      
       <!-- bill from -->
       <div class="bill-from flex flex-column">
         <h4>Bill From</h4>
@@ -119,9 +121,9 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { createInvoice } from "@/api/invoice.js";
-import Loading  from "@/components/Loading.vue";
+import Loading from "@/components/Loading.vue";
 
 export default {
   name: "InvoiceModal",
@@ -156,11 +158,11 @@ export default {
       loading: false,
     };
   },
-  components: {Loading},
+  components: { Loading },
   methods: {
     ...mapMutations(["TOGGLE_INVOICE", "TOGGLE_MODAL"]),
-    checkClick(event){
-      if(event.target === this.$refs.invoiceWrap){
+    checkClick(event) {
+      if (event.target === this.$refs.invoiceWrap) {
         this.TOGGLE_MODAL();
       }
     },
@@ -228,6 +230,9 @@ export default {
     submitForm() {
       this.uploadInvoice();
     },
+  },
+  computed: {
+    ...mapState(["editInvoice"]),
   },
   created() {
     // get current date for invoice field
