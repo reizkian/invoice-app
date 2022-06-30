@@ -13,4 +13,8 @@ function updateInvoice(_id, payloadInvoice) {
   return axios.put(`/api/invoice/${_id}`, payloadInvoice);
 }
 
-export { createInvoice, readBulkInvoice, updateInvoice };
+function deleteInvoice(_id) {
+  return axios.delete(`/api/invoice/${_id}`);
+}
+
+export { createInvoice, readBulkInvoice, updateInvoice, deleteInvoice };

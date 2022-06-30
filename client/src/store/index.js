@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { createInvoice, readBulkInvoice, updateInvoice } from "@/api/invoice";
+import { createInvoice, readBulkInvoice, updateInvoice, deleteInvoice } from "@/api/invoice";
 
 export default createStore({
   state: {
@@ -48,6 +48,12 @@ export default createStore({
     async UPDATE_INVOICE({ commit }, { _id, payload }) {
       const response = await updateInvoice(_id, payload);
       commit("UPDATE_CURRENT_INVOICE", response.data.payload);
+    },
+    async DELETE_INVOICE({ commit }, { _id }) {
+      console.log(`trigger delete ${_id}`);
+      const response = await deleteInvoice(_id);
+      console.log(response);
+      commit("TOGGLE_INVOICES_LOADED");
     },
   },
   modules: {},

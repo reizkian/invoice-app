@@ -14,9 +14,9 @@
       </div>
       <div class="right flex">
         <button @click="toggleEditInvoice()" class="dark-purple">Edit</button>
-        <button @click="deleteInvoice(invoice._id)" class="red">Delete</button>
-        <button @click="updateStatusToPaid(invoice._id)" v-if="invoice.invoicePending" class="green">Mark as Paid</button>
-        <button @click="updateStatusToPending(invoice._id)" v-if="invoice.invoiceDraft || invoice.invoicePaid" class="orange">Mark as Pending</button>
+        <button @click="deleteInvoice()" class="red">Delete</button>
+        <button @click="updateStatusToPaid()" v-if="invoice.invoicePending" class="green">Mark as Paid</button>
+        <button @click="updateStatusToPending()" v-if="invoice.invoiceDraft || invoice.invoicePaid" class="orange">Mark as Pending</button>
       </div>
     </div>
 
@@ -92,13 +92,17 @@ export default {
   },
   methods: {
     ...mapMutations(["SET_CURRENT_INVOICE", "TOGGLE_EDIT_INVOICE", "TOGGLE_INVOICE"]),
-    ...mapActions(["UPDATE_INVOICE"]),
+    ...mapActions(["UPDATE_INVOICE", "DELETE_INVOICE"]),
     getCurrentInvoice() {
       this.SET_CURRENT_INVOICE(this.$route.params._id);
       this.invoice = this.currentInvoice[0];
     },
     getUpdatedCurrentInoice() {
       this.invoice = this.currentInvoice[0];
+    },
+    toggleEditInvoice() {
+      this.TOGGLE_EDIT_INVOICE();
+      this.TOGGLE_INVOICE();
     },
     updateStatusToPaid() {
       this.invoice.invoiceDraft = false;
@@ -112,9 +116,9 @@ export default {
       this.invoice.invoicePaid = false;
       this.UPDATE_INVOICE({ _id: this.invoice._id, payload: this.invoice });
     },
-    toggleEditInvoice() {
-      this.TOGGLE_EDIT_INVOICE();
-      this.TOGGLE_INVOICE();
+    deleteInvoice() {
+      console.log(`button delete on ${this.invoice._id}`);
+      this.DELETE_INVOICE({ _id: this.invoice._id });
     },
   },
   computed: {
