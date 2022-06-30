@@ -2,9 +2,9 @@
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex flex-column">
     <form @submit.prevent="submitForm" class="invoice-content">
       <Loading v-show="loading" />
+      <h1 v-if="!editInvoice">New Invoice</h1>
       <h1 v-if="editInvoice">Edit Invoice</h1>
-      <h1 v-else>New Invoice</h1>
-      
+
       <!-- bill from -->
       <div class="bill-from flex flex-column">
         <h4>Bill From</h4>
@@ -112,8 +112,9 @@
           <button @click="closeInvoice" type="button" class="red">cancel</button>
         </div>
         <div class="right">
-          <button @click="saveDraft" type="submit" class="dark-purple">save draft</button>
-          <button @click="publishInvoice" type="submit" class="purple">create invoice</button>
+          <button v-if="!editInvoice" @click="saveDraft" type="submit" class="dark-purple">Save Draft</button>
+          <button v-if="!editInvoice" @click="publishInvoice" type="submit" class="green">Create Invoice</button>
+          <button v-if="editInvoice" @click="upadteInvoice" type="submit" class="purple">Update Invoice</button>
         </div>
       </div>
     </form>
@@ -121,8 +122,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
-import { createInvoice } from "@/api/invoice.js";
+import { mapState, mapMutations, mapActions } from "vuex";
 import Loading from "@/components/Loading.vue";
 
 export default {
@@ -145,9 +145,9 @@ export default {
       paymentDueDateUnix: null,
       paymentDueDate: null,
       productDescription: null,
-      invoicePending: null,
-      invoiceDraft: null,
-      invoicePaid: null,
+      invoicePending: false,
+      invoiceDraft: false,
+      invoicePaid: false,
       invoiceItemList: [],
       invoiceTotal: null,
       dateOptions: {
@@ -160,7 +160,8 @@ export default {
   },
   components: { Loading },
   methods: {
-    ...mapMutations(["TOGGLE_INVOICE", "TOGGLE_MODAL"]),
+    ...mapMutations(["TOGGLE_INVOICE", "TOGGLE_MODAL", "TOGGLE_EDIT_INVOICE"]),
+    ...mapActions(["CREATE_INVOICE", "UPDATE_INVOICE"]),
     checkClick(event) {
       if (event.target === this.$refs.invoiceWrap) {
         this.TOGGLE_MODAL();
@@ -168,6 +169,9 @@ export default {
     },
     closeInvoice() {
       this.TOGGLE_INVOICE();
+      if (this.editInvoice) {
+        this.TOGGLE_EDIT_INVOICE();
+      }
     },
     addNewInvoiceItem() {
       this.invoiceItemList.push({
@@ -222,8 +226,16 @@ export default {
         invoiceDraft: this.invoiceDraft,
         invoicePaid: null,
       };
-      console.log(payloadInvoice);
-      await createInvoice(payloadInvoice);
+
+      if (!this.editInvoice) {
+        // create mode
+        this.CREATE_INVOICE(payloadInvoice);
+      } else {
+        // update mode
+        this.UPDATE_INVOICE({_id: this._id, payload: payloadInvoice});
+        this.TOGGLE_EDIT_INVOICE();
+      }
+
       this.loading = false;
       this.TOGGLE_INVOICE();
     },
@@ -232,12 +244,38 @@ export default {
     },
   },
   computed: {
-    ...mapState(["editInvoice"]),
+    ...mapState(["editInvoice", "currentInvoice"]),
   },
   created() {
-    // get current date for invoice field
-    this.invoiceDateUnix = Date.now();
-    this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString("en-us", this.dateOptions);
+    if (!this.editInvoice) {
+      // get current date for invoice field
+      this.invoiceDateUnix = Date.now();
+      this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString("en-us", this.dateOptions);
+    }
+    if (this.editInvoice) {
+      const invoice = this.currentInvoice[0];
+      this._id = invoice._id;
+      this.billerStreetAddress = invoice.billerStreetAddress;
+      this.billerCity = invoice.billerCity;
+      this.billerZipCode = invoice.billerZipCode;
+      this.billerCountry = invoice.billerCountry;
+      this.clientName = invoice.clientName;
+      this.clientEmail = invoice.clientEmail;
+      this.clientStreetAddress = invoice.clientStreetAddress;
+      this.clientCity = invoice.clientCity;
+      this.clientZipCode = invoice.clientZipCode;
+      this.clientCountry = invoice.clientCountry;
+      this.invoiceDateUnix = invoice.invoiceDateUnix;
+      this.invoiceDate = invoice.invoiceDate;
+      this.paymentTerms = invoice.paymentTerms;
+      this.paymentDueDateUnix = invoice.paymentDueDateUnix;
+      this.paymentDueDate = invoice.paymentDueDate;
+      this.productDescription = invoice.productDescription;
+      this.invoicePending = invoice.invoicePending;
+      this.invoiceDraft = invoice.invoiceDraft;
+      this.invoiceItemList = invoice.invoiceItemList;
+      this.invoiceTotal = invoice.invoiceTotal;
+    }
   },
   watch: {
     paymentTerms() {

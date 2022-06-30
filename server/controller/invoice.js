@@ -9,7 +9,7 @@ exports.createInvoice = (req, res) => {
       return res.status(500).json({ message: `internal server error` });
     } else {
       console.log(`success create invoice ${result._id}`);
-      return res.status(200).json({ message: `success create invoice ${result._id}` });
+      return res.status(200).json({ message: `success create invoice ${result._id}`, payload: result });
     }
   });
 };
@@ -20,8 +20,25 @@ exports.readBulkInvoices = (req, res) => {
       console.log(error);
       return res.status(500).json({ message: `internal server error` });
     } else {
-      console.log(invoices);
+      // console.log(invoices);
       return res.status(200).json(invoices);
+    }
+  });
+};
+
+exports.updateInvoice = (req, res) => {
+  const payloadInvoice = req.body;
+  const _id = req.params._id;
+
+  console.log(payloadInvoice);
+
+  invoice.findByIdAndUpdate(_id, payloadInvoice, { new: true }, (error, result) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).json({ message: `internal server error` });
+    } else {
+      console.log(`success update invoice ${_id}`);
+      return res.status(200).json({ message: `success create invoice ${result._id}`, payload: result });
     }
   });
 };

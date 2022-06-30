@@ -1,6 +1,6 @@
 <template>
   <div vi-if="invoice" class="invoice-view container">
-    <router-link class="nav-link flex" :to="{name:'Home'}"> <img src="@/assets/icon-arrow-left.svg" alt="" /> Go Back </router-link>
+    <router-link class="nav-link flex" :to="{ name: 'Home' }"> <img src="@/assets/icon-arrow-left.svg" alt="" /> Go Back </router-link>
 
     <!-- header -->
     <div class="header flex">
@@ -26,13 +26,12 @@
       <div class="top flex">
         <div class="left flex flex-column">
           <p><span>#</span>{{ invoice._id }}</p>
-          <p>{{invoice.productDescription}}</p>
+          <p>{{ invoice.productDescription }}</p>
         </div>
         <div class="right flex flex-column">
-          <p>{{ invoice.billerStreetAddress }}</p>
-          <p>{{ invoice.billerCity }}</p>
-          <p>{{ invoice.billerZipCode }}</p>
           <p>{{ invoice.billerCountry }}</p>
+          <p>{{ invoice.billerCity }} {{ invoice.billerZipCode }}</p>
+          <p>{{ invoice.billerStreetAddress }}</p>
         </div>
       </div>
       <!-- invoice details - middle -->
@@ -97,16 +96,26 @@ export default {
       this.SET_CURRENT_INVOICE(this.$route.params._id);
       this.invoice = this.currentInvoice[0];
     },
-    toggleEditInvoice(){
+    getUpdatedCurrentInoice() {
+      this.invoice = this.currentInvoice[0];
+    },
+    toggleEditInvoice() {
       this.TOGGLE_EDIT_INVOICE();
       this.TOGGLE_INVOICE();
-    }
+    },
   },
   computed: {
     ...mapState(["currentInvoice"]),
   },
   created() {
     this.getCurrentInvoice();
+  },
+  watch: {
+    "$store.state.currentInvoice": {
+      handler() {
+        this.getUpdatedCurrentInoice();
+      },
+    },
   },
 };
 </script>
@@ -188,6 +197,7 @@ export default {
         font-size: 12px;
         align-items: flex-end;
         color: #888eb0;
+        text-align: right;
       }
     }
 
@@ -289,12 +299,12 @@ export default {
         align-items: center;
         border-radius: 0 0 20px 20px;
 
-        p{
-          flex:1;
+        p {
+          flex: 1;
           font-size: 12px;
         }
 
-        p:nth-child(2){
+        p:nth-child(2) {
           font-size: 28px;
           text-align: right;
         }

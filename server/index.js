@@ -7,11 +7,12 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const { createInvoice, readBulkInvoices } = require("./controller/invoice");
+const { createInvoice, readBulkInvoices, updateInvoice } = require("./controller/invoice");
 
 // api
 app.post("/api/invoice", createInvoice);
 app.get("/api/invoices", readBulkInvoices);
+app.put("/api/invoice/:_id", updateInvoice);
 
 // database connection
 mongoose

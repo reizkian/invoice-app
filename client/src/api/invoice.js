@@ -5,8 +5,12 @@ function createInvoice(payloadInvoice) {
   return axios.post("/api/invoice", payloadInvoice);
 }
 
-function readBulkInvoice(){
-  return axios.get("/api/invoices")
+function readBulkInvoice() {
+  return axios.get("/api/invoices");
 }
 
-export { createInvoice, readBulkInvoice };
+function updateInvoice(_id, payloadInvoice) {
+  return axios.put(`/api/invoice/${_id}`, payloadInvoice);
+}
+
+export { createInvoice, readBulkInvoice, updateInvoice };
