@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {
   name: "Invoice",
@@ -92,12 +92,25 @@ export default {
   },
   methods: {
     ...mapMutations(["SET_CURRENT_INVOICE", "TOGGLE_EDIT_INVOICE", "TOGGLE_INVOICE"]),
+    ...mapActions(["UPDATE_INVOICE"]),
     getCurrentInvoice() {
       this.SET_CURRENT_INVOICE(this.$route.params._id);
       this.invoice = this.currentInvoice[0];
     },
     getUpdatedCurrentInoice() {
       this.invoice = this.currentInvoice[0];
+    },
+    updateStatusToPaid() {
+      this.invoice.invoiceDraft = false;
+      this.invoice.invoicePending = false;
+      this.invoice.invoicePaid = true;
+      this.UPDATE_INVOICE({ _id: this.invoice._id, payload: this.invoice });
+    },
+    updateStatusToPending() {
+      this.invoice.invoiceDraft = false;
+      this.invoice.invoicePending = true;
+      this.invoice.invoicePaid = false;
+      this.UPDATE_INVOICE({ _id: this.invoice._id, payload: this.invoice });
     },
     toggleEditInvoice() {
       this.TOGGLE_EDIT_INVOICE();

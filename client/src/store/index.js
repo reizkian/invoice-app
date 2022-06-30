@@ -31,7 +31,7 @@ export default createStore({
     TOGGLE_EDIT_INVOICE(state) {
       state.editInvoice = !state.editInvoice;
     },
-    UPDATE_INVOICE(state, payload) {
+    UPDATE_CURRENT_INVOICE(state, payload) {
       state.currentInvoice = [payload];
     },
   },
@@ -47,7 +47,7 @@ export default createStore({
     },
     async UPDATE_INVOICE({ commit }, { _id, payload }) {
       const response = await updateInvoice(_id, payload);
-      commit("UPDATE_INVOICE", response.data.payload);
+      commit("UPDATE_CURRENT_INVOICE", response.data.payload);
     },
   },
   modules: {},
