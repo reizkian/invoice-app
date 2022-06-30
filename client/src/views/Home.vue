@@ -95,6 +95,7 @@ export default {
     .right {
       flex: 1;
     }
+
     .right {
       justify-content: flex-end;
       align-items: center;

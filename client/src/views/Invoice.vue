@@ -76,6 +76,10 @@
           <p>${{ invoice.invoiceTotal }}</p>
         </div>
       </div>
+      <!-- <button class="download-pdf dark-purple">download pdf</button> -->
+    </div>
+    <div class="brand-container flex">
+      <p class="brand"><span>&lt;/&gt;</span> darklab software solution &copy; 2022</p>
     </div>
   </div>
 </template>
@@ -159,7 +163,7 @@ export default {
 
   .header {
     align-items: center;
-    padding: 24px 32px;
+    padding: 24px 50px;
     font-size: 12px;
 
     .left {
@@ -182,7 +186,7 @@ export default {
   }
 
   .invoice-details {
-    padding: 48px;
+    padding: 50px 50px 50px 50px;
     margin-top: 24px;
 
     .top {
@@ -325,6 +329,27 @@ export default {
           font-size: 28px;
           text-align: right;
         }
+      }
+    }
+
+    .download-pdf {
+      margin: auto;
+      margin-top: 30px;
+      width: 200px;
+    }
+  }
+
+  .brand-container {
+    .brand {
+      margin-top: 20px;
+      color: #888eb0;
+      font-size: 12px;
+      span {
+        color: #fff;
+        padding: 5px;
+        background-color: #111420;
+        border-radius: 5px;
+        font-size: 16px;
       }
     }
   }
