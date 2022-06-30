@@ -2,11 +2,11 @@
 
 An invoice is a document given to the buyer by the seller to collect payment. It includes the cost of the products purchased or services rendered to the buyer. Invoices can also serve as legal records, if they contain the names of the seller and client, description and price of goods or services, and the terms of payment.
 
-| Technology Stack                             |
-| -------------------------------------------- |
-| [VueJS](https://firebase.google.com/)        |
-| [NodeJS](https://www.sqlite.org/index.html)  |
-| [MongoDB](https://www.sqlite.org/index.html) |
+| Technology Stack                    |
+| ----------------------------------- |
+| [VueJS](https://vuejs.org/)         |
+| [NodeJS](https://nodejs.org/en/)    |
+| [MongoDB](https://www.mongodb.com/) |
 
 ## Project Setup & installation
 
@@ -42,7 +42,9 @@ $ mongo --version
 ```
 
 ## Run Developmet Server
+
 open in separate teminal instance
+
 ```
 # terminal 1 - client
 $ cd ./client
